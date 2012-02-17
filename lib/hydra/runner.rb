@@ -164,6 +164,11 @@ module Hydra #:nodoc:
       ]
 
       RSpec.instance_variable_set(:@world, nil)
+      
+      # Resetting RSpec world causes it to forget shared examples
+      # We reload shared examples from spec/support/shared_examples as a workaround
+      Dir[Rails.root.join("spec/support/shared_examples/**/*.rb")].each {|f| load f rescue nil}
+      
       RSpec::Core::Runner.run(config, hydra_output, hydra_output)
 
       hydra_output.rewind
